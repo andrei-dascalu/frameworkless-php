@@ -1,0 +1,62 @@
+version: '3.9'
+services:
+  php-cli:
+    container_name: php-cli
+    volumes:
+      - .:/application
+    networks:
+      - framework
+    build:
+      context: .
+      dockerfile: Dockerfile
+  php-app:
+    container_name: php-app
+    networks:
+      - framework
+    env_file:
+      - .env
+    volumes:
+      - .:/application
+    entrypoint:
+      - /bin/sh
+      - -c
+      - /usr/bin/rr serve -c .rr.dev.yaml
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frameworkless.entrypoints=websecure"
+      - "traefik.http.routers.frameworkless-metrics.entrypoints=websecure"
+      - "traefik.http.routers.frameworkless.tls=true"
+      - "traefik.http.routers.frameworkless-metrics.tls=true"
+      - "traefik.http.routers.frameworkless.rule=Host(`www.frameworkless.dev`)"
+      - "traefik.http.routers.frameworkless-metrics.rule=Host(`www.frameworkless.dev`) && PathPrefix(`/metrics`)"
+      - "traefik.http.routers.frameworkless.service=frameworkless"
+      - "traefik.http.routers.frameworkless-metrics.service=frameworkless-metrics"
+      - "traefik.http.services.frameworkless.loadbalancer.server.port=8080"
+      - "traefik.http.services.frameworkless-metrics.loadbalancer.server.port=9180"
+  loadbalancer:
+    image: traefik:v3.0.0-beta2
+    container_name: loadbalancer
+    networks:
+      - framework
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./.setup/traefik/certificates:/certs:ro
+      - ./.setup/traefik/config/traefik.yaml:/traefik.yaml:ro
+    command:
+      - "--configFile=/traefik.yaml"
+    ports:
+      - "80:80"
+      - "443:443"
+    labels:
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.frameworkless.dev`)"
+      - "traefik.enable=true"
+
+networks:
+  framework:
+    external: false

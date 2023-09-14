@@ -1,0 +1,60 @@
+providers:
+ providersThrottleDuration: "50"
+ docker:
+   watch: true
+   exposedByDefault: false
+   swarmMode: false
+ file:
+   filename: /traefik.yaml
+
+serversTransport:
+ insecureSkipVerify: true
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+    forwardedHeaders:
+      insecure: true
+    proxyProtocol:
+      insecure: true
+
+api:
+  dashboard: true
+  insecure: true
+
+log:
+  level: WARNING
+
+accessLog: {}
+
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+      sniStrict: false
+  certificates:
+    - certFile: /certs/_wildcard.frameworkless.dev+1.pem
+      keyFile: /certs/_wildcard.frameworkless.dev+1-key.pem
+      stores:
+      - default
+
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    buckets:
+      - 1
+      - 3
+      - 5
+      - 10
+
+tracing:
+  jaeger:
+    samplingParam: 0
+    traceContextHeaderName: "x-request-id"

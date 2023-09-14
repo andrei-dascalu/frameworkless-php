@@ -1,0 +1,7 @@
+.setup/traefik/certificates/*
+!.setup/traefik/certificates/.gitkeep
+vendor
+.DS_Store
+.idea
+.vscode
+.env

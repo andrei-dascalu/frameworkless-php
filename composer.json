@@ -1,0 +1,26 @@
+{
+    "name": "andrei-dascalu/frameworkless",
+    "description": "Frameworkless PHP",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "nyholm/psr7": "^1.8.0",
+        "laminas/laminas-diactoros": "^3.2.0",
+        "php-di/php-di": "^7.0",
+        "spiral/roadrunner": "^2023.2.2",
+        "spiral/roadrunner-http": "^3.1.0",
+        "league/route": "^5.1.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrei"
+        }
+    ],
+    "minimum-stability": "stable"
+}
