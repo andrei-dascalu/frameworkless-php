@@ -15,5 +15,4 @@ foreach ($containers as $container) {
     $builder->addDefinitions(sprintf('%s/containers/%s.php', __DIR__, $container));
 }
 
-
 return $builder->build();
