@@ -20,7 +20,7 @@ services:
     entrypoint:
       - /bin/sh
       - -c
-      - /usr/bin/rr serve -c .rr.dev.yaml
+      - /usr/bin/rr serve -c .rr.prod.yaml
     build:
       context: .
       dockerfile: Dockerfile

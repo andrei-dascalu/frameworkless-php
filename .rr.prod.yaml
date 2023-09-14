@@ -1,0 +1,48 @@
+version: "3"
+
+server:
+  command: "php public/index.php"
+  env:
+    - XDEBUG_SESSION: "0"
+
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+http:
+  address: 0.0.0.0:8080
+  middleware: [ "static", "gzip" ]
+  uploads:
+    forbid: [ ".php", ".exe", ".bat" ]
+  headers:
+    response:
+      Strict-Transport-Security: "max-age=31536000; includeSubDomains; preload"
+  static:
+    dir: "public"
+    forbid: [ ".php", ".htaccess" ]
+  pool:
+    num_workers: 2
+    debug: false
+    max_jobs: 18600
+    allocate_timeout: "5m"
+    destroy_timeout: "30s"
+
+logs:
+  mode: development
+  channels:
+    http:
+      level: debug # Log all http requests, set to info to disable
+    server:
+      level: info # Everything written to worker stderr is logged
+      mode: raw
+    metrics:
+      level: debug
+
+metrics:
+  address: "0.0.0.0:9180"
+  collect:
+    app_load_articles_duration:
+      type: gauge
+      help: "Duration of load articles query"
+    app_error_rate:
+      type: counter
+      help: "Error counter"

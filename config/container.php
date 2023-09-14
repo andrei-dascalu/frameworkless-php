@@ -4,6 +4,7 @@ $builder = new DI\ContainerBuilder();
 
 if (getenv('APP_ENV') === 'prod') {
     $builder->enableCompilation('/tmp/container');
+    $builder->writeProxiesToFile(true, '/tmp/proxies');
 }
 
 //add other files as needed

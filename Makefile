@@ -34,3 +34,6 @@ endif
 
 logs:
 	docker-compose logs -f ${APP_CONTAINER}
+
+ssh:
+	docker-compose exec ${APP_CONTAINER} sh
