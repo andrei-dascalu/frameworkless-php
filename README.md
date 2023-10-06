@@ -37,3 +37,9 @@ The Makefile contains a number of commands:
 * `make ssl` will setup TLS certificates. Under Mac, having the `nss` package will ensure that the certificates are recognised across the board. Under Windows, Firefox may need help with manual setup.
 * `make start` will start the entire stack
 * `make composer/install` will ensure installation of composer packages
+
+## To Add ##
+
+* Guzzle
+* Twig
+* Monolog
